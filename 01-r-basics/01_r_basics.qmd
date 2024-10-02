@@ -1,0 +1,690 @@
+---
+title: "R DASTURIGA KIRISH"
+format: html
+editor: visual
+---
+
+## R'da barcha arifmetik amallarni bajarish mumkin
+
+```{r}
+
+1+2 ## qo'shish
+
+6-7 ## ayrish
+
+5/2 ## bo'lish
+
+10*3 ## ko'paytirish
+
+2^3 ## darajaga ko'tarish
+
+```
+
+Since the available symbols on the keyboard are not enough to cover all necessary operators, other, lesser used operators are defined by surrounding them with a percent symbol `%`:
+
+%/% integer division
+
+%% residual after integer division (modulo)
+
+```{r}
+27 %/% 24       # result = 1
+27 %%  24       # result = 3
+```
+
+Ammo, biror maqsadsiz bu hisob-kitoblarni qilish qiziqarsiz. Shuning uchun, kelinglar, bir dataset bilan ishlaymiz. Bu dataset ikkilamchi bozordagi o'rtacha uy joylar narxidan iborat.
+
+1 metr kv uyning narxi formula ko'rinishda quyidagicha ifodalanadi:
+
+`narx (1 metr kv)  = uyning umumiy narxi (AQSH dollarda)/uyning kattaligi (metr kvadratda).`
+
+Misol uchun, Toshkent shahrida umumiy maydon 65 metr kv bo'lgan 2 xonali uyning narxi 45 ming dollar tursin. Shunda, uyning 1 kvadrat metri narxi:
+
+```{r}
+45000/65
+```
+
+Yoki, 1 metr kvadrati 692,3 dollar bo'lgan 65 metr kvadratli uyning narxi qanday bo'ladi?
+
+```{r}
+692.3077*65
+```
+
+Agar bir raqamdan qayta-qayta foydalansak, uni har safar yuqoridagidek yozish noqulay. Ushbu taskni osonlashtirish uchun **obektlardan (objects)** foydalanamiz.
+
+## Objects
+
+You can think of R objects as *saving information*, for example simple numbers or just plain text. Once saved we can recall it whenever we want by just running the name of the object.
+
+> Everything that exists in R is *an object*
+
+[**`<-`** operatorini hosil qilish uchun shortcut: **alt -** .]{.aside}
+
+We create R objects by using the assignment operator: **`<-`**. [Albatta, bu belgining (`<-`) muqobili sifatida mana bu (`->`) yoki (`=`) ham foydalansa bo'ladi. Lekin, ko'pincha `<-`belgi ishlatiladi.]{.aside}
+
+Misol uchun yuqoridagi raqamlarni objects sifatida saqlab olishimiz mumkin:
+
+```{r}
+total_price <- 45000
+total_area <- 65
+```
+
+Agar ushbu objectlarni run qilsak, yuqoridagi raqamlar kelib chiqadi
+
+```{r}
+total_price
+```
+
+```{r}
+total_area
+```
+
+Endi yuqoridagi hisob-kitobni objectlardan foydalanib amalga oshirsak bo'ladi.
+
+[Note that object names could be anything here! I could have chosen to just name them x, y and z.I typically use lower-case snake case in this style: price_per_square. Batafsil keyinroq to'xtalamiz]{.aside}
+
+```{r}
+price_per_square <- total_price/total_area
+```
+
+`price_per_square` objecti uyning 1 metr kvadrat narxini o'zida saqlaydi.
+
+Agar Toshkent shaxrida 1 metr kvadrat uyning o'rtacha narxi shunday bo'lsa, 85 metr kvadrat uyning narxi qanday bo'ladi?
+
+```{r}
+price_per_square * 85
+```
+
+## Mantiqiy operatorlar
+
+Logical operators are used for logical tests which can result in either: [sometimes this is also called a boolean variable]{.aside}
+
+TRUE or FALSE
+
+Let's first create some more objects to try some logical tests!
+
+```{r}
+price_tashkent <- 700
+price_andijan <- 420
+price_jizzax <- 380
+price_samarkand <- 600
+price_fergana <- 410
+price_namangan <- 430
+```
+
+`==` asks whether two values are the same or **equal**
+
+The code below tests the following statement: *The maximum lifespan of a lion equals that of a boar.*
+
+```{r}
+price_andijan == price_fergana
+```
+
+Since both maximum lifespans are `27` this is of course a **`TRUE`** statement.
+
+`!=` asks whether two values are the *not* the same or **unequal**
+
+The code below tests the following statement: *The maximum lifespan of a lion **does not equal** that of a boar.*
+
+```{r}
+price_jizzax != price_tashkent
+```
+
+Since both maximum lifespans are `27` (as we saw before) this is of course a **`FALSE`** statement.
+
+We can also test whether certain values are greater or smaller than others: `>` greater than
+
+The code below tests the statement: *The lifespan of a human is greater than the lifespan of a fly.*
+
+```{r}
+price_samarkand > price_tashkent
+```
+
+Since the maximum human lifespan is `122.5` and a fly does not live longer than `0.3` years this is of course a **`TRUE`** statement.
+
+Also note the following options:
+
+`>=` greater or equals and `<=` smaller or equals
+
+## Combine Logical Operators
+
+We can also combine logical tests by testing multiple statements at the same time:
+
+-   `&` stands for "and" (unsurprisingly)
+
+-   `|` stands for "or"
+
+For example both `alligator_lifespan` and `fly_lifespan` have to be greater than `mouse_lifespan` for the code below to evaluate as `TRUE`.
+
+```{r}
+price_tashkent > price_fergana & 
+price_jizzax > price_fergana
+```
+
+If we say `|` (= or) instead, it means either statement evaluation to `TRUE` is enough!
+
+```{r}
+price_tashkent > price_fergana | 
+price_jizzax > price_fergana
+```
+
+Now we learned about operators and some basic objects.
+
+But so far objects have only ever held a *single numeric value*.
+
+R is of course much more powerful than that and objects can hold any number and types of data.
+
+Now we will take a look at **vectors**, or objects that include more than one value.
+
+## Vectorlar
+
+You can simply imagine vectors as a list of values. They can consist of numbers but also *strings* (or: text).
+
+In order to create a vector in R we make use of `c()` (stands for *concatenate*)
+
+```{r}
+c(10,30,40,50)
+```
+
+We can also create a vector of strings (text) by using quotes:[Vector bir xil turdagi elementlardan (faqat raqamlar yoki faqat string) tashkil topishi kerak]{.aside}
+
+```{r}
+c("Men","stringlardan", "iborat", "vektor", "bo'laman")
+```
+
+We can combine the lifespans we assigned into objects earlier:
+
+```{r}
+price <- c(price_andijan, price_fergana, price_jizzax, price_namangan, price_samarkand, price_tashkent) 
+```
+
+We can also create a vector of strings by using quotes:
+
+```{r}
+regions <- c("andijan", "fergana", "jizzax", "namangan", "samarkand", "tashkent")
+```
+
+Masalan, 65 metr kvadratli uyning narxini bilmoqchi bo'lsak, umumiy maydonni yuqoridagi vectorga ko'paytirish kifoya
+
+```{r}
+total_area*price
+```
+
+Notice how the operation is performed for each item separately and the result is yet another vector. Chiqqan natijani biz alohida obekt sifatida saqlashimiz ham mumkin. We can also use *logical* operators with vectors:
+
+```{r}
+price > price_andijan
+```
+
+Yana bir juda foydali operator: **`%in%`**. Ushbu operator vector ichida biz ko'rsatgan qiymatlar bor yoki yo'qligini tekshiradi. Asosiy ishlatilish yo'li quyidagicha : vector1 %in% vector2
+
+Aytaylik, biz `andijan`, `namangan`, `jizzax` ni `regions` vectorida mavjudligini tekshirmoqchimiz. Agar biz `|` dan foydalansak kod quyidagicha yoziladi:
+
+```{r}
+regions == "andijan" | regions == "namangan" | regions == "jizzax"
+```
+
+`%in%` operatori bilan esa quyigadagi vectorni yaratib, masalani osonroq yechish mumkin :
+
+```{r}
+regions_to_check <- c("andijan", "namangan", "jizzax")
+
+regions %in% regions_to_check
+
+```
+
+## Indekslash
+
+When you want to know a specific value within your object you can use indexing. Indexing is done via square brackets `[]`. The basic setup looks like this:
+
+vector\[elements\]
+
+Exracting the first element of a vector:
+
+```{r}
+price[1]
+```
+
+```{r}
+regions[1]
+```
+
+### Mantiqiy amallar bilan indekslash
+
+So if an expression evaluates to `TRUE` it will **keep** that element and when it evaluates to `FALSE` it will remove the **element**.
+
+vector\[vector of TRUE/FALSE of same length\]
+
+Kelinglar price vectordan uy narxi andijondan baland bo'lganlarini ajratuvchi mantiqiy operatordan foydalanaylik
+
+```{r}
+higher_andijan <- price > price_andijan
+
+higher_andijan
+```
+
+Now we can use square brackets to only keep those animals that have greater lifespans than humans.
+
+```{r}
+regions[higher_andijan]
+```
+
+### Vektorlar qiymatini/elementlarini o'zgartirish
+
+Eski vektor qiymatlarini o'zgartirmagan holda, uni yangi obektda saqlab olamiz va keyin yangi obektning dastlabki 2 ta elementini o'zgartiramiz.
+
+```{r}
+price_modified <- price 
+
+price_modified [1:3] <- price_modified + 20
+
+price_modified
+
+
+price_modified[6] <- 800
+```
+
+### Element qo'shish
+
+You can add elements to the end of a vector by passing the original vector into the \`c\` function, like the following:
+
+```{r}
+price_xorezm <- 370
+
+price_xorazm_mod <- c(price, price_xorezm) 
+```
+
+## data turlari (data/object types)
+
+There are five main types of data in R that you d come across.[Bundan tashqari, ob'ektlarning 6 turi - Factor ham mavjud bo'lib, categorical o'zgaruvchilar bilan ishlashda foydalaniladi.]{.aside}
+
+1.  **Double** (`1.2, 5, 7, 3.14159, Inf, Nan(Not a Number)`)
+
+2.  **Integer** (`1, 2, 3, 4, 5`)
+
+3.  **Complex** (`i + 4`)
+
+4.  **Logical** (`TRUE/FALSE`)
+
+5.  **Character/Strings** (`"a", "apple"`)
+
+![**Obyekt turlari**](https://d33wubrfki0l68.cloudfront.net/eb6730b841e32292d9ff36b33a590e24b6221f43/57192/diagrams/vectors/summary-tree-atomic.png "Obekt turlar"){fig-align="center" width="95%"}
+
+Some of these types have values with special meaning:
+
+```{r}
+NaN               # double "not a number"
+Inf               # double "infinity"
+-Inf              # double "negative infinity"
+NA                # "missing" value
+NULL              # special variable without a type
+```
+
+Special type values are returned in special circumstances:
+
+```{r}
+10 / 0       # Inf
+-2 / 0       # -Inf
+0 / 0       # NaN
+```
+
+`NA` is a special value that simply means *missing value*.
+
+```{r}
+c(12, NA, 23, 22, NA)
+```
+
+Work with \`NA\` values are pretty much the same: they do not respond to operations and remains NAs:
+
+```{r}
+
+na_vec <- c(12, NA, 23, 22, NA)
+
+na_vec +3
+
+```
+
+Vector qanday data ekanligini bilish uchun quyidagi funksiyalardan foydalaniladi:
+
+```{r}
+is.integer(price) # integer? 
+is.character(price) # character? 
+is.atomic(price) # atomic? 
+typeof(price) # what's the type?
+
+```
+
+**Short exercise: Create and examine your vector**
+
+Create a character vector called \`fruit\` containing 4 of your favorite fruits. Then evaluate its structure using the commands below.
+
+# FUNKSIYALAR
+
+> Everything that happens in R is *a function.*
+
+An example function: `seq`
+
+![](r_basics_files/seq2.png)
+
+If we would want to create a vector from 1 to 10 that increments by 1 we can simple specify the following input values for the arguments:
+
+-   `from`: 1
+
+-   `to`: 10
+
+-   `by`: 1
+
+This is how that looks like in code:
+
+```{r}
+seq(from=1, to=10, by=1)
+```
+
+### Passing Values
+
+Now there are two ways to pass values to functions in R:
+
+1.  Pass by argument *names* (we already did this!)
+
+2.  Pass by argument *position*
+
+In the former case, we specifically mention which arguments we want to pass our values to. For that, it doesn't matter in which **order** we pass our arguments.
+
+```{r}
+seq(to = 10, by = 1, from = 1)
+```
+
+### Passing Values by position
+
+**Coders are lazy**.
+
+There is no need to always specify which argument you mean exactly when you can just match *by position*. So our sequence example could just as well look like this:
+
+```{r}
+seq(1, 10, 1)
+```
+
+And it works because the documentation tells us that the first three arguments are `from`, `to`, and `by`. In the future you will see it often that people just leave out the arguments completely so it's good to get used to it.
+
+## More examples: Mean and Median
+
+Many functions have so intuitive arguments that we often don't need to even look up the documentation.
+
+An easy function to use is `mean` which simply calculates the average of a numeric vector.
+
+Let's try this with the `price` vector we created earlier.
+
+```{r}
+mean(price)
+```
+
+Or median
+
+```{r}
+median(price)
+```
+
+## Function help page
+
+Check the function's help page with `?mean`
+
+`mean(x, trim = 0, na.rm = FALSE, ...)`
+
+-   Read **Usage** section
+
+    -   What arguments have default values?
+
+-   Read **Arguments** section
+
+    -   What does `trim` do?
+
+-   Run **Example** code
+
+## Creating our own functions
+
+We can create our own function using the call: `function()`. We encode what is supposed to happen within curly brackets `{}`. Here is the anatomy of a function:
+
+\color{purple}{\text{my_function_name}} \<- \text{function}(\color{orange} {\text{argument}}){
+
+\color{green}{\text{# function body}}
+
+\color{lightblue}{\text{output}} \<- \color{orange}{\text{argument}}
+
+\text{return(}\color{lightblue}{\text{output}}\text{)} }
+
+Let's create a slightly more useful function: a function which squares numeric values.
+
+```{r}
+square <- function(here_goes_my_number) { 
+  output <- here_goes_my_number^2        
+  return(output)                  
+}
+```
+
+```{r}
+square(2)
+```
+
+Let's create a function that is able to calculate total price of houses given average price per square and total area. We call the function `total_price`.
+
+```{r}
+total_price <- function(total_area){
+  price_per_square <- 700
+  ratio <- price_per_square*total_area
+  return(ratio)
+}
+```
+
+```{r}
+total_price(90)
+```
+
+## Obyekt turlari
+
+It is time to collect the different variable types, which includes different R-object(s):
+
+-   vectors: containing only the same R-objects (values) in a single-dimension vector
+
+-   lists: can mix different R-objects as elements
+
+-   matrices: containing the same R-objects (values) in a 2-dimensional matrix
+
+-   arrays: allows for multidimensional matrices
+
+-   data frames: containing data, basically a flexible matrix, which can contain different vectors with different R-object and organized as it has variables and observations. We will discuss this in the next lecture more in detail.
+
+### Lists
+
+An object contains elements of **different data types**. Lists are great to combine different types of R-objects. These are created via \`list()\` function: [Lists are also vectors, but different from atomic vectors because their elements can be of any type. In short, they are generic vectors.]{.aside}
+
+```{r}
+lst <- list(# list constructor/creator
+  1:3, 
+  "a", 
+  c(TRUE, FALSE, TRUE), 
+  c(2.3, 5.9)
+)
+lst
+```
+
+You can coerce other objects using `as.list()`. You can test for a list with `is.list()`
+
+```{r}
+x <- 1:10
+
+x <- as.list(x)
+
+is.list(x)
+```
+
+A list does not print to the console like a vector. Instead, each element of the list starts on a new line.
+
+```{r}
+my_vec <- c(1, 2, 3)
+my_list <- list(1, 2, 3)
+
+my_vec
+```
+
+```{r}
+my_list
+```
+
+If one pays attention it is easy to see, that the output is different from a simple vector. Actually, it is structured such that it has 3 elements and within each element, there is an R-object or possibly a vector.
+
+For lists, elements are indexed by double brackets. Single brackets will still return a(nother) list.
+
+List can store other lists within itself:
+
+```{r}
+list(list(1, 3+0i), list("a"))
+list(list(1, 3+0i), "a")        # one list can have both lists and simple vectors
+list(list(1, list("a")))        # lists can be nested more than 2 levels deep
+list(a=TRUE, b=1:100)           # list elements can have names
+```
+
+A list can be empty and store empty elements
+
+```{r}
+l1 <- list()
+l2 <- list(numeric(), list(), complex())
+```
+
+**Exercises**
+
+1.  What are the four basic types of atomic vectors? How does a list differ from an atomic vector?
+
+2.  Why is `1 == "1"` true? Why is `-1 < FALSE` true? Why is `"one" < 2` false?
+
+3.  Create three vectors and then combine them into a list.
+
+4.  If `x` is a list, what is the class of `x[1]`? How about `x[[1]]`?
+
+### Indexing lists
+
+Let create a list:
+
+```{r}
+my_list2 <- list(c('a','b'),c(1,2,3),sqrt(2)^2==2)
+```
+
+You can select the different elements similarly as with the vectors
+
+```{r}
+my_list2[1]
+```
+
+and the selected element will be still a list variable type. If you want to have the vector out of that certain element, you will need to use double brackets:
+
+```{r}
+
+my_list2[[1]]
+
+```
+
+and finally, you can get certain elements out of the vector you have selected in the following way:
+
+```{r}
+
+my_list2[[1]][1]
+```
+
+Elements in a list are replaced using procedures equivalent to subsetting them:
+
+```{r}
+l <- list(a=TRUE, b=c("a","b"), c=1:100)
+
+l[[1]] <- FALSE        # replace the first list element with FALSE
+l[1]   <- list(FALSE)  # same as above
+l[1]   <- FALSE        # also same as above
+l[[1]] <- list(FALSE)  # ! replaces first element with a list
+l[2]   <- NULL         # removes the second element from the list
+```
+
+Selecting a single element from a list by name is a frequent procedure, therefore it has a shortcut operator `$`:
+
+```{r}
+l <- list(a=TRUE, b=c("a","b"), c=list(c1=1, c2=2))
+
+l$a     # same as l[["a"]]
+l$c     # same as l[["c"]]
+l$c$c1  # same as l[["c"]][["c1"]]
+```
+
+# Data Frames
+
+Dataframes in R are implemented as a class on top of lists, with the restriction of each element within a list having the same length. Such implementation allows to construct tables, where each list element is interpreted as a separate column. As a result, `data.frame` class can contain columns of different types.
+
+Data frame quyidagicha hosil qilish mumkin
+
+```{r}
+l <- list(id=1:5, name=c("a","b","c","d","e"), state=c(TRUE,TRUE,FALSE,TRUE,TRUE))
+as.data.frame(l)
+
+#   id name state
+# 1  1    a  TRUE
+# 2  2    b  TRUE
+# 3  3    c FALSE
+# 4  4    d  TRUE
+# 5  5    e  TRUE
+
+# same as above:
+
+df <- data.frame(id=1:5, name=c("a","b","c","d","e"), state=c(TRUE,TRUE,FALSE,TRUE,TRUE))
+```
+
+Bundan tashqari, data frameni ikkita bir xil uzunlikdagi vektorni argument sifatida yuborish orqali ham hosil qilish mumkin
+
+```{r}
+price_data <- data.frame(regions, price) 
+```
+
+### Variable Names
+
+We can also retrieve the variable names of any data frame by passing it to `names()`.
+
+```{r}
+names(price_data)
+```
+
+### Retrieve variables
+
+If we want to retrieve specific variables from a data frame we can do that via the `$` operator. Think of the `$` symbol as a door opener that helps you check what is inside an object.
+
+```{r}
+price_data$price
+```
+
+## Indexing
+
+Just as we did before with vectors and lists we can also index data frames with square brackets: `[]`. However, unlike vectors, data frames have **two dimensions**. So that is why the square brackets in this case take two inputs, separated by a comma:
+
+dataset\[rows,columns\]
+
+-   The first value after the opening square bracket refers to which rowswhich rows you want to keep.
+
+-   The second value refers to which columns which columns you want to keep.
+
+Misol uchun, biz 2-ustunning 1-qatoridagi elementni olmoqchi bo'lsak:
+
+```{r}
+price_data[1, 2]  
+```
+
+*If* we want to keep a certain row but all columns we can do this by leaving the *second* value within the square brackets empty.
+
+```{r}
+price_data[1, ]  
+```
+
+*If* we want to keep a certain column but keep all rows we can do this by leaving the *first* value within the square brackets empty.
+
+```{r}
+price_data[, 2]
+```
+
+The underlying data type is a list.
+
+```{r}
+typeof(price_data)
+class(price_data)
+```

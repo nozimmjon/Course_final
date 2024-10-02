@@ -1,0 +1,219 @@
+---
+title: "TIDY DATA"
+author: "Nozimjon Ortiqov"
+date: "'r Sys.Date()'"
+output: 
+  html_document:
+    toc: true 
+    toc_depth: 2
+    toc_float: 
+      smooth_scroll: true
+      collapsed: false
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tidy data nima?
+
+## 1.1 Terminologiya
+
+dataset (ma'lumotlar to'plami), observations (kuzatilmalar), variables (o'zgaruvchilar)
+
+### Data set
+
+Dataset bu qiymatlar to'plami. U raqamlar/sonlar yoki harflardan iborat bo'lib, turli shaklda saqlanadi. Datasetdagi har bir qiymat ma'lum bir **o'zgaruvchi** va **kuzatilmaga** tegishli bo'ladi.
+
+### O'zgaruvchilar
+
+O'zgaruvchilar har bir kuzatiluvchi bo'yicha yig'iluvchi yoki o'lchanuvchi turli ma'lumotlardir.
+
+Bu yerda **7**ta turli o'zgaruvchi mavjud - **ID, LastName, FirstName, Sex, City, State, Occupation**. O'zgaruvchilar odatda **ustun boshida turadi**.
+
+![O'zgaruvchilar](001.png)
+
+### **Kuzatilmalar**
+
+Har bir o'zgaruvchi kesimida bir kishi yoki predmet bo'yicha olingan o'lchovlar - **kuzatilma** hisoblanadi. **Kuzatilmalar** o'ziga tegishli o'zgaruvchining ustuni tagiga va bir qatorga joylashtiriladi.
+
+![Kuzatilmalar](002.png)
+
+### Ma'lumot turlari
+
+Odatda bir individual uchun ma'lumotlar bir nechta manbadan olinadi.
+
+## 1.2. Tidy data prinsiplari
+
+Hadley Wickham ["Tidy Data"](https://www.jstatsoft.org/article/view/v059i10) nomli paperida tidy data'ga quyidagicha ta'rif beradi:
+
+> Tidy dataset' bu oson manipulyatsiya (o'zgartirish), modellashtirish va vizualizatsiya qilish mumkin bo'lgan ma'lumotlar to'plami. Unda har bir kuzatilma bitta qator va jadvalni tashkil etadi.
+
+1.  **Har bir o'zgaruvchi faqat bir ustunda joylashgan bo'lishi kerak (1-prinsip)**
+
+    ![](%D0%90%D0%BD%D0%BD%D0%BE%D1%82%D0%B0%D1%86%D0%B8%D1%8F%202021-12-07%20190344.png)
+
+2.  **Bir qator bitta kuzatilmaga tegishli bo'lishi kerak (2-prinsip)**
+
+<!-- -->
+
+    ![](2-princip.png)
+
+3.  **Har bir qiymat o'zining yacheykasiga ega bo'lishi kerak.**
+
+Quyidagi rasm barcha prinsiplarni o'zida ifoda etadi.
+
+![](tidy_data%20.png)
+
+## 1.2.3 Tidy data afzalliklari
+
+There are a number of benefits to working within a tidy data framework:
+
+1.  Tidy data have a *consistent data structure* - This eliminates the *many* different ways in which data can be stored. By imposing a uniform data structure, the cognitive load imposed on the analyst is minimized for each new project.
+
+2.  Tidy data *foster tool development* - Software that all work within the tidy data framework can all work well with one another, even when developed by different individuals, ultimately increasing the variety and scope of tools available, without requiring analysts to learn an entirely new mental model with each new tool.
+
+3.  Tidy data require only a *small set of tools to be learned* - When using a consistent data format, only a small set of tools is required and these tools can be reused from one project to the next.
+
+4.  Tidy data allow for *datasets to be combined* - Data are often stored in multiple tables or in different locations. By getting each table into a tidy format, combining across tables or sources becomes trivial.
+
+## 1.2.4 Tidy data'ni saqlash qoidalari
+
+1.  Bir xillikni saqlang (Be consistent).
+
+2.  O'zgaruvchilarni yaxshi nomlang.
+
+3.  Sanalarni quyidagi formatda yozing - **YYYY-MM-DD**.
+
+4.  Bo'sh yacheykalar qoldirmang.
+
+5.  Yacheykaga faqat bitta narsa yozing.
+
+6.  Ma'lumotlarni text fayl ko'rinishida saqlang.
+
+#### 1.2.4.1 Bir xillikni saqlang (Be consistent)
+
+Bir xillikni saqlash ortiqcha qiyinchilikdan saqlaydi. Masalan dataset'da jinsni "erkak" va "ayol" deb nomlagan bo'lsangiz, barcha joyda shunday kiriting. "A", "E" deb kiritmang. Bir xil kodlashdan foydalaning.
+
+Bu qoida o'zgaruvchilarni nomlashga ham ta'luqli. Masalan, bir listda "ID" deb nomlagan bo'lsak, boshqa listda ham shunday nomlash kerak - 'id', yoki 'identifier' deb yozish kerak emas. Bir xillikni saqlash kerak.
+
+Bu qoida ma'lumotlar tahlil qilishning barcha bosqichlarida amal qiladi.
+
+![](being_consistent.png)
+
+#### 1.2.4.2 O'zgaruvchilarni yaxshi nomlang
+
+Fayl va o'zgaruvchilarni nomlashda bo'sh joylar qoldirmang. Faylni Doctor Visit 1 deb nomlashdan ko'ra "doctor_visit_v1" deb nomlash ma'qulroq. Defisdan foydalanish tavsiya etiladi. Xuddi shu qoida o'zgaruchilarni nomlashga amal qiladi.
+
+Shuningdek, o'zgaruvchi nomlari imkon qadar qisqaroq va ma'noli bo'lgani yaxshi. F1 juda qisqa va hech qanday ma'no bermaydi. "doctor_visit_v1" ancha ma'noli nom.
+
+#### 1.2.4.3 Sanalarni quyidagi formatda yozing - **YYYY-MM-DD**
+
+Sanalarni kiritganda [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standardiga amal qilish kerak. Masalan, 2021 yil 31 dekabrni kiritmoqchi bo'lsak, uni "2021-12-31" ko'rinishida kiritish kerak.
+
+![](date_entering.png)
+
+#### 1.2.4.4 Bo'sh yacheyka qoldirmang
+
+Barcha yacheykalarni to'ldiring. Agar ma'lumot yo'q bo'lsa, `NA` deb yozing qo'ying.
+
+#### ![](no_empty_cell.png) 1.2.4.5 Yacheykaga faqat bitta narsa yozing
+
+Ba'zida raqam yoniga uning birligi qo'shib yozish amaliyoti mavjud. Og'irlik bo'lsa, yoniga (bitta yacheykani o'ziga) *kg*ni qo'shib yozib qo'yish mumkin. Bunday qilmang. Raqamni alohida yacheykaga, uning o'lchov birligini alohida yacheykaga yozing, yoki o'zgaruvchi nomiga qo'shib yozing - "ogirlik_kg" ko'rinishida.
+
+## 1.3 Non-Tidy --\> Tidy
+
+Tidy data haqida to'xtalib o'tishdan asosiy maqsad amaliyotda asosan non-tidy ko'rinishidagi ma'lumotlarga duch kelamiz.
+
+### 1.3.1 Data set'larda ko'p uchraydigan muammolar
+
+1.  Ustun nomlarida qiymatlar turadi (aslida o'zgaruvchi nomi bo'lishi kerak).
+
+2.  Bitta ustunda bir nechta o'zgaruvchi bo'lishi mumkin.
+
+3.  O'zgaruvchilar ham qatorga, ham ustunga kiritilgan bo'lishi mumkin.
+
+4.  Bir nechta turdagi data bir listda joylashgan bo'lishi mumkin.
+
+5.  Bitta kuzatilma bir nechta listlarda joylashgan bo'lishi mumkin.
+
+### 1.3.2 Tidy bo'lmagan dataset'ga misollar
+
+#### Tidying up: going from wide to long using `pivot_longer`
+
+One task that is commonly performed to get data into a tidy format is to combine values that are stored in separate columns, but are really part of the same variable, into one. Data is often stored this way because this format is sometimes more intuitive for human readability and understanding, and humans create data sets. In Figure belov, the table on the left is in an untidy, "wide" format because the year values (2006, 2011, 2016) are stored as column names. And as a consequence, the values for population for the various cities over these years are also split across several columns.
+
+For humans, this table is easy to read, which is why you will often find data stored in this wide format. However, this format is difficult to work with when performing data visualization or statistical analysis using R. For example, if we wanted to find the latest year it would be challenging because the year values are stored as column names instead of as values in a single column. So before we could apply a function to find the latest year (for example, by using `max`), we would have to first extract the column names to get them as a vector and then apply a function to extract the latest year. The problem only gets worse if you would like to find the value for the population for a given region for the latest year. Both of these tasks are greatly simplified once the data is tidied.
+
+Another problem with data in this format is that we don't know what the numbers under each year actually represent. Do those numbers represent population size? Land area? It's not clear. To solve both of these problems, we can reshape this data set to a tidy data format by creating a column called "year" and a column called "population." This transformation---which makes the data "longer"---is shown as the right table in Figure below.
+
+![](pivot_functions.001.jpeg)
+
+We can achieve this effect in R using the `pivot_longer` function. The `pivot_longer` function combines columns, and is usually used during tidying data when we need to make the data frame longer and narrower. To learn how to use `pivot_longer`, we will work through an example with the `region_lang_top5_cities_wide.csv` data set. This data set contains the counts of how many Canadians cited each language as their mother tongue for five major Canadian cities (Toronto, Montréal, Vancouver, Calgary and Edmonton) from the 2016 Canadian census. To get started, we will load the `tidyverse` package and use `read_csv` to load the (untidy) data.
+
+```{r}
+lang_wide <- readr::read_csv("https://raw.githubusercontent.com/UBC-DSCI/introduction-to-datascience/master/data/region_lang_top5_cities_wide.csv")
+```
+
+What is wrong with our untidy format above? The table on the left in Figure below represents the data in the "wide" (messy) format. From a data analysis perspective, this format is not ideal because the values of the variable *region* (Toronto, Montréal, Vancouver, Calgary and Edmonton) are stored as column names. Thus they are not easily accessible to the data analysis functions we will apply to our data set. Additionally, the *mother tongue* variable values are spread across multiple columns, which will prevent us from doing any desired visualization or statistical tasks until we combine them into one column. For instance, suppose we want to know the languages with the highest number of Canadians reporting it as their mother tongue among all five regions. This question would be tough to answer with the data in its current format. We *could* find the answer with the data in this format, though it would be much easier to answer if we tidy our data first. If mother tongue were instead stored as one column, as shown in the tidy data on the right in Figure [3.8](https://ubc-dsci.github.io/introduction-to-datascience/wrangling.html#fig:img-pivot-longer-with-table), we could simply use one line of code (`max(mother_tongue)`) to get the maximum value. ![](pivot_functions.003.jpeg)
+
+Figure below details what arguments we need to specify to use the `tidyverse` function, `pivot_longer`, to accomplish this data transformation. ![](img-pivot-longer-1.png)
+
+We use `pivot_longer` to combine the Toronto, Montréal, Vancouver, Calgary, and Edmonton columns into a single column called `region`, and create a column called `mother_tongue` that contains the count of how many Canadians report each language as their mother tongue for each metropolitan area. We use a colon `:` between Toronto and Edmonton to tell R to select all the columns between Toronto and Edmonton:
+
+```{r}
+lang_mother_tidy <- pivot_longer(lang_wide,
+  cols = Toronto:Edmonton,
+  names_to = "region",
+  values_to = "mother_tongue"
+)
+
+lang_mother_tidy
+```
+
+The data above is now tidy because all three criteria for tidy data have now been met:
+
+1.  All the variables (`category`, `language`, `region` and `mother_tongue`) are now their own columns in the data frame.
+
+2.  Each observation, i.e., each `category`, `language`, `region`, and count of Canadians where that language is the mother tongue, are in a single row.
+
+3.  Each value is a single cell, i.e., its row, column position in the data frame is not shared with another value.
+
+#### Tidying up: going from long to wide using `pivot_wider`
+
+Suppose we have observations spread across multiple rows rather than in a single row. For example, in Figure below, the table on the left is in an untidy, long format because the `count` column contains three variables (population, commuter, and incorporated count) and information about each observation (here, population, commuter, and incorporated counts for a region) is split across three rows. Remember: one of the criteria for tidy data is that each observation must be in a single row.
+
+Using data in this format---where two or more variables are mixed together in a single column---makes it harder to apply many usual `tidyverse` functions. For example, finding the maximum number of commuters would require an additional step of filtering for the commuter values before the maximum can be computed. In comparison, if the data were tidy, all we would have to do is compute the maximum value for the commuter column. To reshape this untidy data set to a tidy (and in this case, wider) format, we need to create a column called "population," "commuters," and "incorporated." This is illustrated in the right table of Figure below.
+
+![](pivot_functions.002.jpeg)
+
+To tidy this type of data in R, we can use the `pivot_wider` function. The `pivot_wider` function generally increases the number of columns (widens) and decreases the number of rows in a data set. To learn how to use `pivot_wider`, we will work through an example with the `region_lang_top5_cities_long.csv` data set. This data set contains the number of Canadians reporting the primary language at home and work for five major cities (Toronto, Montréal, Vancouver, Calgary and Edmonton).
+
+```{r}
+lang_long <-  read_csv("https://raw.githubusercontent.com/UBC-DSCI/introduction-to-datascience/master/data/region_lang_top5_cities_long.csv")
+
+lang_long
+```
+
+What makes the data set shown above untidy? In this example, each observation is a language in a region. However, each observation is split across multiple rows: one where the count for `most_at_home` is recorded, and the other where the count for `most_at_work` is recorded. Suppose our analysis goal with this data set was to visualize the relationship between the number of Canadians reporting their primary language at home and work. Doing that would be difficult with this data in its current form, since these two variables are stored in the same column. Figure below shows how this data will be tidied using the `pivot_wider` function.
+
+![](pivot_functions.004.jpeg){width="1920"}Figure below details what we need to specify to use the `pivot_wider` function.
+
+![](img-pivot-wider-1.png)
+
+```{r}
+lang_home_tidy <- pivot_wider(lang_long,
+  names_from = type,
+  values_from = count
+)
+lang_home_tidy 
+```
+
+The data above is now tidy!
+
+## Additional resources
+
+[Graphical intro to Pivot](https://speakerdeck.com/yutannihilation/a-graphical-introduction-to-tidyrs-pivot-star)
+
+[Emi Tanaka: Tidying data with tidyr](https://emitanaka.org/datawrangle-workshop-ssavic/slides/day1-session4.html#3)
