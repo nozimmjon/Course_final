@@ -1,0 +1,129 @@
+---
+title: "Importing_data_part_2"
+author: "Nozimjon Ortiqov"
+date: "28 02 2022"
+output: html_document
+---
+
+```{r}
+#|echo: TRUE
+#|message:FALSE
+#|warning:FALSE
+```
+
+## Introduction
+
+This is the second post in the series **Importing Data into R**. In the previous post, we explored reading data from flat/delimited files. In this post, we will:
+
+-   list sheets in an excel file
+  
+-   read data from an excel sheet
+
+-   read specific cells from an excel sheet
+
+-   read specific rows
+
+-   read specific columns
+
+-   read data from - SAS - SPSS - STATA
+
+## Libraries, Data & Code
+
+We will use the [readxl](http://readr.tidyverse.org/index.html) package. It has no external dependencies as compared to other packages available for reading data from Excel. The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) and the codes from [here](https://gist.github.com/aravindhebbali/65dc2af57b8eda098f2b878095c5aaa4).
+
+```{r}
+library(readxl) 
+```
+
+## List Sheets
+
+An excel file may contain several sheets. Let us see how many sheets are present in `sample.xls` file and their respective names using `excel_sheets()`.
+
+```{r}
+excel_sheets('data/sample.xls')
+```
+
+## Read Sheet
+
+Now that we know the number of sheets and their names, let us read data from the `ecom` sheet of the `sample.xls` file using `read_excel()`. We will specify the file name, and the sheet name or sheet number.
+
+### Case 1: Specify the sheet number
+
+```{r}
+read_excel('data/sample.xls', sheet = 3) 
+```
+
+### Case 2: Specify the sheet name
+
+```{r}
+read_excel('data/sample.xls', sheet = 'ecom')
+```
+
+Notice when you use the sheet name, the name should be enclosed in single/double quotes.
+
+## Read Specific Cells
+
+You may not always want to read all the columns or rows from the excel sheet. In such cases, you can specify the cells from which the data must be read which can be achieved using the `range` argument. So how do we specify the cells from which to read data? There are different ways of specifying the cell range and we will look at them one by one:
+
+### Method 1
+
+The first method uses the cell names along with `:` to specify the cell range. For example, to read data from first 4 rows of columns **B** and **C**, we will specify the range as `"B1:C4"`.
+
+```{r}
+read_excel('data/sample.xls', sheet = 3, range = "B1:C4")
+```
+
+To read data from first 5 rows of columns **A**, **B** and **C**, we will specify the range as `"A1:C5"`.
+
+```{r}
+read_excel('data/sample.xls', sheet = 3, range = "A1:C5")
+```
+
+### Method 2
+
+In the second method, we start from a particular cell and specify the number of rows and columns to be covered keeping the initial cell as anchorage. In the below example, we want to read 3 rows and 2 columns starting from the cell `A4`.
+
+```{r}
+read_excel('data/sample.xls', sheet = 1, col_names = FALSE,
+  range = anchored("A4", dim = c(3, 2)))
+
+```
+
+### Method 3
+
+In this method, we use the `cell_limit()` and specify the location of two ends of a rectangle covering the cells we want to read. For example, to read data from the first 6 rows and 4 columns, we will specify the range as following:
+
+-   start from the first row of the first column
+
+-   cover all cells upto the 6th row of the 4th column
+
+```{r}
+read_excel('data/sample.xls', sheet = 1,
+  range = cell_limits(c(1, 1), c(6, 4))) 
+```
+
+Let us quickly look at how we will specify range of cells using the above 3 methods when we want to read data from the first 4 rows of columns `B` and `C`:
+
+#### Method 1
+
+```{r}
+
+read_excel('data/sample.xls', sheet = 1,
+  range = "B1:C4")
+```
+
+#### Method 2
+
+```{r}
+
+read_excel('data/sample.xls', sheet = 1,
+  range = anchored("B1", dim = c(4, 2)))
+```
+
+#### Method 3
+
+```{r}
+
+read_excel('data/sample.xls', sheet = 1,
+  range = cell_limits(c(1, 2), c(4, 3)))
+```
